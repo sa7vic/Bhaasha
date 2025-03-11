@@ -20,7 +20,6 @@ selectTag.forEach((tag, id) => {
   }
 });
 
-
 selectTag.forEach((tag) => {
   tag.addEventListener("change", () => {
     if (fromText.value.trim()) {
@@ -28,7 +27,6 @@ selectTag.forEach((tag) => {
     }
   });
 });
-
 
 exchangeIcon.addEventListener("click", () => {
   let tempText = fromText.value,
@@ -38,9 +36,8 @@ exchangeIcon.addEventListener("click", () => {
   selectTag[0].value = selectTag[1].value;
   selectTag[1].value = tempLang;
 
-  translateText();
+  translateText(); 
 });
-
 
 fromText.addEventListener("keyup", () => {
   if (!fromText.value) {
@@ -51,7 +48,7 @@ fromText.addEventListener("keyup", () => {
 });
 
 translateBtn.addEventListener("click", () => {
-  translateText();
+  translateText(); 
 });
 
 function translateText() {
