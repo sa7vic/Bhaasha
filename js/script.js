@@ -20,6 +20,14 @@ selectTag.forEach((tag, id) => {
   }
 });
 
+selectTag.forEach((tag) => {
+  tag.addEventListener("change", () => {
+    if (fromText.value.trim()) {
+      translateText(); 
+    }
+  });
+});
+
 exchangeIcon.addEventListener("click", () => {
   let tempText = fromText.value,
     tempLang = selectTag[0].value;
@@ -27,43 +35,23 @@ exchangeIcon.addEventListener("click", () => {
   toText.value = tempText;
   selectTag[0].value = selectTag[1].value;
   selectTag[1].value = tempLang;
+
+  translateText(); 
 });
 
 fromText.addEventListener("keyup", () => {
   if (!fromText.value) {
     toText.value = "";
   } else {
-    autoTranslate(); 
+    translateText(); 
   }
 });
 
 translateBtn.addEventListener("click", () => {
-  let text = fromText.value.trim(),
-    translateFrom = selectTag[0].value,
-    translateTo = selectTag[1].value;
-  if (!text) return;
-  toText.setAttribute("placeholder", "Translating...");
-
-  let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
-
-  fetch(apiUrl)
-    .then((res) => res.json())
-    .then((data) => {
-      toText.value = data.responseData.translatedText;
-      data.matches.forEach((match) => {
-        if (match.id === 0) {
-          toText.value = match.translation;
-        }
-      });
-      toText.setAttribute("placeholder", "Translation");
-    })
-    .catch(() => {
-      toText.value = "Translation Error!";
-    });
+  translateText(); 
 });
 
-
-function autoTranslate() {
+function translateText() {
   let text = fromText.value.trim(),
     translateFrom = selectTag[0].value,
     translateTo = selectTag[1].value;
@@ -127,7 +115,7 @@ if (SpeechRecognition) {
   recognition.onresult = (event) => {
     fromText.value = event.results[0][0].transcript;
     micIcon.style.color = "";
-    autoTranslate(); 
+    translateText(); 
   };
 
   recognition.onerror = () => {
