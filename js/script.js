@@ -20,6 +20,16 @@ selectTag.forEach((tag, id) => {
   }
 });
 
+
+selectTag.forEach((tag) => {
+  tag.addEventListener("change", () => {
+    if (fromText.value.trim()) {
+      translateText(); 
+    }
+  });
+});
+
+
 exchangeIcon.addEventListener("click", () => {
   let tempText = fromText.value,
     tempLang = selectTag[0].value;
@@ -27,14 +37,24 @@ exchangeIcon.addEventListener("click", () => {
   toText.value = tempText;
   selectTag[0].value = selectTag[1].value;
   selectTag[1].value = tempLang;
+
+  translateText();
 });
+
 
 fromText.addEventListener("keyup", () => {
   if (!fromText.value) {
     toText.value = "";
+  } else {
+    translateText(); 
   }
 });
+
 translateBtn.addEventListener("click", () => {
+  translateText();
+});
+
+function translateText() {
   let text = fromText.value.trim(),
     translateFrom = selectTag[0].value,
     translateTo = selectTag[1].value;
@@ -57,7 +77,8 @@ translateBtn.addEventListener("click", () => {
     .catch(() => {
       toText.value = "Translation Error!";
     });
-});
+}
+
 icons.forEach((icon) => {
   icon.addEventListener("click", ({ target }) => {
     if (!fromText.value && !toText.value) return;
@@ -78,6 +99,7 @@ icons.forEach((icon) => {
     }
   });
 });
+
 const micIcon = document.querySelector("#mic");
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -96,6 +118,7 @@ if (SpeechRecognition) {
   recognition.onresult = (event) => {
     fromText.value = event.results[0][0].transcript;
     micIcon.style.color = "";
+    translateText(); 
   };
 
   recognition.onerror = () => {
